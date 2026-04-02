@@ -1,48 +1,42 @@
 package server
-
 import "net/http"
-
-func (s *Server) dashboard(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Write([]byte(dashHTML))
-}
-
-const dashHTML = `<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Books</title>
-<style>
-:root{--bg:#1a1410;--bg2:#241e18;--bg3:#2e261e;--rust:#c45d2c;--rl:#e8753a;--leather:#a0845c;--cream:#f0e6d3;--cd:#bfb5a3;--cm:#7a7060;--gold:#d4a843;--green:#4a9e5c;--red:#c44040;--mono:'JetBrains Mono',monospace;--serif:'Libre Baskerville',Georgia,serif}
-*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--cream);font-family:var(--mono);font-size:13px}
-a{color:var(--rl);text-decoration:none}a:hover{color:var(--gold)}
-.hdr{padding:.7rem 1.2rem;border-bottom:1px solid var(--bg3);display:flex;justify-content:space-between;align-items:center}
-.hdr h1{font-family:var(--serif);font-size:1rem}.hdr h1 span{color:var(--rl)}
-.stats{font-size:.7rem;color:var(--leather)}.stats b{color:var(--cream);font-weight:600}
-.main{max-width:700px;margin:0 auto;padding:1.5rem}
-.card{background:var(--bg2);border:1px solid var(--bg3);padding:.8rem 1rem;margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center}
-.card-title{font-size:.8rem;font-weight:600}.card-sub{font-size:.65rem;color:var(--cd)}
-.btn{font-family:var(--mono);font-size:.7rem;padding:.3rem .6rem;border:1px solid;cursor:pointer;background:transparent}
-.btn-p{border-color:var(--rust);color:var(--rl)}.btn-p:hover{background:var(--rust);color:var(--cream)}
-.btn-d{border-color:var(--bg3);color:var(--cm)}.btn-d:hover{border-color:var(--red);color:var(--red)}
-input{background:var(--bg);border:1px solid var(--bg3);color:var(--cream);padding:.4rem .6rem;font-family:var(--mono);font-size:.8rem;width:100%;outline:none;margin-bottom:.5rem}
-input:focus{border-color:var(--rust)}
-.empty{text-align:center;padding:2rem;color:var(--cm);font-style:italic;font-family:var(--serif)}
-</style>
+func (s *Server) dashboard(w http.ResponseWriter, r *http.Request) { w.Header().Set("Content-Type","text/html; charset=utf-8"); w.Write([]byte(dashHTML)) }
+const dashHTML = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Books</title>
+<style>:root{--bg:#1a1410;--bg2:#241e18;--bg3:#2e261e;--rust:#c45d2c;--rl:#e8753a;--leather:#a0845c;--ll:#c4a87a;--cream:#f0e6d3;--cd:#bfb5a3;--cm:#7a7060;--gold:#d4a843;--green:#4a9e5c;--red:#c44040;--mono:'JetBrains Mono',Consolas,monospace;--serif:'Libre Baskerville',Georgia,serif}*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--cream);font-family:var(--mono);font-size:13px;line-height:1.6}.hdr{padding:.6rem 1.2rem;border-bottom:1px solid var(--bg3);display:flex;justify-content:space-between;align-items:center}.hdr h1{font-family:var(--serif);font-size:1rem}.hdr h1 span{color:var(--rl)}.main{max-width:900px;margin:0 auto;padding:1rem 1.2rem}.btn{font-family:var(--mono);font-size:.68rem;padding:.3rem .6rem;border:1px solid;cursor:pointer;background:transparent;transition:.15s}.btn-p{border-color:var(--rust);color:var(--rl)}.btn-p:hover{background:var(--rust);color:var(--cream)}.btn-d{border-color:var(--bg3);color:var(--cm)}.overview{display:flex;gap:1.5rem;margin-bottom:1rem;font-size:.7rem;color:var(--leather)}.overview .stat b{display:block;font-size:1.2rem;color:var(--cream)}.tabs{display:flex;gap:0;margin-bottom:1rem;border-bottom:1px solid var(--bg3)}.tab{padding:.4rem 1rem;cursor:pointer;font-size:.75rem;color:var(--cm);border-bottom:2px solid transparent;transition:.15s}.tab:hover{color:var(--cream)}.tab.active{color:var(--rl);border-bottom-color:var(--rl)}.acct-row{display:flex;align-items:center;gap:.5rem;padding:.4rem .5rem;border-bottom:1px solid var(--bg3);font-size:.75rem}.acct-type{font-size:.6rem;padding:.05rem .3rem;background:var(--bg3);color:var(--ll);border-radius:2px;width:55px;text-align:center}.acct-name{flex:1}.acct-bal{font-weight:600}.txn-row{display:flex;align-items:center;gap:.5rem;padding:.35rem .5rem;border-bottom:1px solid var(--bg3);font-size:.72rem}.txn-date{color:var(--cm);width:70px}.txn-desc{flex:1}.txn-amt{font-weight:600;color:var(--green)}.txn-flow{font-size:.6rem;color:var(--cm)}.empty{text-align:center;padding:2rem;color:var(--cm);font-style:italic;font-family:var(--serif)}.modal-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;z-index:100}.modal{background:var(--bg2);border:1px solid var(--bg3);padding:1.5rem;width:95%;max-width:500px;max-height:90vh;overflow-y:auto}.modal h2{font-family:var(--serif);font-size:.9rem;margin-bottom:1rem}label.fl{display:block;font-size:.65rem;color:var(--leather);text-transform:uppercase;letter-spacing:1px;margin-bottom:.2rem;margin-top:.5rem}input[type=text],input[type=number],input[type=date],select{background:var(--bg);border:1px solid var(--bg3);color:var(--cream);padding:.35rem .5rem;font-family:var(--mono);font-size:.78rem;width:100%;outline:none}.form-row{display:flex;gap:.5rem}.form-row>*{flex:1}</style>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital@0;1&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-</head><body>
-<div class="hdr"><h1><span>Books</span></h1><div class="stats">Total: <b id="ct">-</b></div></div>
-<div class="main">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-<span style="font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--rust)">All transactions</span>
-<button class="btn btn-p" onclick="showCreate()">+ New</button>
-</div>
-<div id="list"></div>
-</div>
+</head><body><div class="hdr"><h1><span>Books</span></h1><div style="display:flex;gap:.3rem"><button class="btn btn-p" onclick="showNewAcct()">+ Account</button><button class="btn btn-p" onclick="showNewTxn()">+ Transaction</button></div></div>
+<div class="main"><div class="overview" id="overview"></div>
+<div class="tabs"><div class="tab active" onclick="showTab('accounts')">Accounts</div><div class="tab" onclick="showTab('transactions')">Transactions</div></div>
+<div id="pane-accounts"></div><div id="pane-transactions" style="display:none"></div></div><div id="modal"></div>
 <script>
-async function load(){const r=await fetch('/api/transactions');const d=await r.json();document.getElementById('ct').textContent=d.count;
-const el=document.getElementById('list');if(!d.transactions.length){el.innerHTML='<div class="empty">No transactions yet.</div>';return}
-el.innerHTML=d.transactions.map(e=>'<div class="card"><div><div class="card-title">'+esc(e.name||e.title||e.id)+'</div><div class="card-sub">'+esc(e.created_at)+'</div></div><button class="btn btn-d" onclick="del(\''+e.id+'\')">Delete</button></div>').join('')}
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
-function showCreate(){const n=prompt('Name:');if(!n)return;fetch('/api/transactions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n})}).then(load)}
-async function del(id){if(!confirm('Delete?'))return;await fetch('/api/transactions/'+id,{method:'DELETE'});load()}
-load();setInterval(load,30000)
-</script></body></html>` + "`"
+let accounts=[],transactions=[];
+async function api(u,o){return(await fetch(u,o)).json()}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function fmt(n){return(n>=0?'':'−')+'$'+Math.abs(n).toFixed(2)}
+async function init(){
+  const[ad,td,pl]=await Promise.all([api('/api/accounts'),api('/api/transactions'),api('/api/pl')]);
+  accounts=ad.accounts||[];transactions=td.transactions||[];
+  document.getElementById('overview').innerHTML='<div class="stat"><b>'+fmt(pl.revenue)+'</b>Revenue</div><div class="stat"><b>'+fmt(pl.expenses)+'</b>Expenses</div><div class="stat"><b style="color:'+(pl.net>=0?'var(--green)':'var(--red)')+'">'+fmt(pl.net)+'</b>Net</div>';
+  renderAccounts();renderTxns()
+}
+function renderAccounts(){
+  document.getElementById('pane-accounts').innerHTML=accounts.length?accounts.map(a=>
+    '<div class="acct-row"><span class="acct-type">'+a.type+'</span><span class="acct-name">'+esc(a.name)+'</span><span class="acct-bal" style="color:'+(a.balance>=0?'var(--green)':'var(--red)')+'">'+fmt(a.balance)+'</span></div>').join(''):'<div class="empty">No accounts yet.</div>'
+}
+function renderTxns(){
+  document.getElementById('pane-transactions').innerHTML=transactions.length?transactions.map(t=>
+    '<div class="txn-row"><span class="txn-date">'+t.date+'</span><span class="txn-desc">'+esc(t.description)+'</span><span class="txn-flow">'+esc(t.debit_name)+' → '+esc(t.credit_name)+'</span><span class="txn-amt">'+fmt(t.amount)+'</span></div>').join(''):'<div class="empty">No transactions yet.</div>'
+}
+function showTab(t){document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',i===(t==='accounts'?0:1)));document.getElementById('pane-accounts').style.display=t==='accounts'?'':'none';document.getElementById('pane-transactions').style.display=t==='transactions'?'':'none'}
+function showNewAcct(){
+  document.getElementById('modal').innerHTML='<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal"><h2>New Account</h2><label class="fl">Name</label><input type="text" id="na-name"><div class="form-row"><div><label class="fl">Type</label><select id="na-type"><option>asset</option><option>liability</option><option>equity</option><option>revenue</option><option>expense</option></select></div><div><label class="fl">Currency</label><input type="text" id="na-cur" value="USD"></div></div><div style="display:flex;gap:.5rem;margin-top:1rem"><button class="btn btn-p" onclick="saveAcct()">Create</button><button class="btn btn-d" onclick="closeModal()">Cancel</button></div></div></div>'
+}
+async function saveAcct(){const b={name:document.getElementById('na-name').value,type:document.getElementById('na-type').value,currency:document.getElementById('na-cur').value};if(!b.name){alert('Name required');return};await api('/api/accounts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});closeModal();init()}
+function showNewTxn(){
+  const opts=accounts.map(a=>'<option value="'+a.id+'">'+esc(a.name)+'</option>').join('');
+  document.getElementById('modal').innerHTML='<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal"><h2>New Transaction</h2><label class="fl">Date</label><input type="date" id="nt-date" value="'+new Date().toISOString().split('T')[0]+'"><label class="fl">Description</label><input type="text" id="nt-desc"><div class="form-row"><div><label class="fl">Debit Account</label><select id="nt-debit">'+opts+'</select></div><div><label class="fl">Credit Account</label><select id="nt-credit">'+opts+'</select></div></div><div class="form-row"><div><label class="fl">Amount</label><input type="number" id="nt-amt" step="0.01"></div><div><label class="fl">Category</label><input type="text" id="nt-cat"></div></div><div style="display:flex;gap:.5rem;margin-top:1rem"><button class="btn btn-p" onclick="saveTxn()">Create</button><button class="btn btn-d" onclick="closeModal()">Cancel</button></div></div></div>'
+}
+async function saveTxn(){const b={date:document.getElementById('nt-date').value,description:document.getElementById('nt-desc').value,debit_account_id:document.getElementById('nt-debit').value,credit_account_id:document.getElementById('nt-credit').value,amount:parseFloat(document.getElementById('nt-amt').value)||0,category:document.getElementById('nt-cat').value};if(b.amount<=0){alert('Amount required');return};await api('/api/transactions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});closeModal();init()}
+function closeModal(){document.getElementById('modal').innerHTML=''}
+init()
+</script></body></html>`
